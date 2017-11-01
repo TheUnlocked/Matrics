@@ -3,6 +3,9 @@ using Matrics.Exceptions;
 
 namespace Matrics
 {
+    /// <summary>
+    /// An extensions class for vectors
+    /// </summary>
     public static class VectorExtensions{
         /// <summary>
         /// Standard vector addtion
@@ -12,7 +15,7 @@ namespace Matrics
         /// <returns>Vector sum</returns>
         public static T[] Add<T>(this T[] vector1, T[] vector2){
             if (vector1.Length == vector2.Length){
-                return vector1.Map((v, i) => v + (dynamic)vector2[i]);
+                return vector1.Apply((v, i) => v + (dynamic)vector2[i]);
             }
             else{
                 throw new MatrixSizeException($"Dimensions {vector1.Length} and {vector2.Length} do not match.");
@@ -28,7 +31,7 @@ namespace Matrics
         /// <returns>Vector difference</returns>
         public static T[] Subtract<T>(this T[] vector1, T[] vector2){
             if (vector1.Length == vector2.Length){
-                return vector1.Map((v, i) => v - (dynamic)vector2[i]);
+                return vector1.Apply((v, i) => v - (dynamic)vector2[i]);
             }
             else{
                 throw new MatrixSizeException($"Dimensions {vector1.Length} and {vector2.Length} do not match.");
@@ -43,7 +46,7 @@ namespace Matrics
         /// <param name="scalar">Scalar factor</param>
         /// <returns>Vector-scalar product</returns>
         public static T[] Multiply<T>(this T[] vector, T scalar){
-            return vector.Map((v, i) => v * (dynamic)scalar);
+            return vector.Apply((v, i) => v * (dynamic)scalar);
         }
 
         /// <summary>
@@ -53,7 +56,7 @@ namespace Matrics
         /// <param name="scalar">Scalar divisor</param>
         /// <returns>Vector-scalar quotient</returns>
         public static T[] Divide<T>(this T[] vector, T scalar){
-            return vector.Map((v, i) => v / (dynamic)scalar);
+            return vector.Apply((v, i) => v / (dynamic)scalar);
         }
 
         /// <summary>
@@ -91,8 +94,74 @@ namespace Matrics
             return sum;
         }
 
-        public static T GetDistance<T>(this T[] vector){
-            return vector.Map((v, i) => v * (dynamic)v).Sum();
+        /// <summary>
+        /// Gets the squared magnitude of a vector
+        /// </summary>
+        /// <param name="vector">The vector</param>
+        /// <returns>The squared magnitude of the vector</returns>
+        public static T MagnitudeSquared<T>(this T[] vector)
+        {
+            if (vector.Length == 0)
+                throw new VectorSizeException("A vector cannot have no elements");
+            return vector.Apply((v, i) => v * (dynamic)v).Sum();
+        }
+
+        /// <summary>
+        /// Gets the magnitude of a vector.
+        /// <para>The magnitude will be processed as a <see cref="double"/> through the <see cref="Math.Sqrt(double)"/> function. Use <see cref="MagnitudeSquared{T}(T[])"/> instead for incompatible types.</para>
+        /// </summary>
+        /// <param name="vector">The vector</param>
+        /// <returns>The magnitude of the vector</returns>
+        public static T Magnitude<T>(this T[] vector)
+        {
+            return Math.Sqrt((dynamic)vector.MagnitudeSquared());
+        }
+
+        /// <summary>
+        /// Gets the normalized (or unit) vector.
+        /// <para>This uses <see cref="Magnitude{T}(T[])"/>, meaning any input will be processed as a <see cref="double"/> through <see cref="Math.Sqrt(double)"/>.</para>
+        /// </summary>
+        /// <param name="vector">The vector</param>
+        /// <returns></returns>
+        public static T[] Normalize<T>(this T[] vector)
+        {
+            return vector.Divide(vector.Magnitude());
+        }
+
+        /// <summary>
+        /// Produces the scalar projection of one vector onto another vector
+        /// <para>This uses <see cref="Magnitude{T}(T[])"/>, meaning any input will be processed as a <see cref="double"/> through <see cref="Math.Sqrt(double)"/>.</para>
+        /// </summary>
+        /// <param name="fromVector">The vector to project from</param>
+        /// <param name="onVector">The vector to project onto</param>
+        /// <returns>The scalar projection</returns>
+        public static T ScalarProject<T>(this T[] fromVector, T[] onVector)
+        {
+            return fromVector.DotProduct(onVector) / (dynamic)onVector.Magnitude();
+        }
+
+        /// <summary>
+        /// Projects one vector onto another.
+        /// <para>This uses <see cref="ScalarProject{T}(T[], T[])"/> and <see cref="Normalize{T}(T[])"/>, meaning any input will be processed as a <see cref="double"/> through <see cref="Math.Sqrt(double)"/>.</para>
+        /// </summary>
+        /// <param name="fromVector">The vector to project from</param>
+        /// <param name="onVector">The vector to project onto</param>
+        /// <returns>The vector projection</returns>
+        public static T[] VectorProject<T>(this T[] fromVector, T[] onVector)
+        {
+            return onVector.Normalize().Multiply(fromVector.ScalarProject(onVector));
+        }
+
+        /// <summary>
+        /// Rejects one vector onto another
+        /// <para>This uses <see cref="VectorProject{T}(T[], T[])"/>, meaning any input will be processed as a <see cref="double"/> through <see cref="Math.Sqrt(double)"/>.</para>
+        /// </summary>
+        /// <param name="fromVector">The vector to reject from</param>
+        /// <param name="onVector">The vector to reject onto</param>
+        /// <returns>The vector rejection</returns>
+        public static T[] VectorReject<T>(this T[] fromVector, T[] onVector)
+        {
+            return fromVector.Subtract(fromVector.VectorProject(onVector));
         }
 
         /// <summary>
@@ -102,7 +171,7 @@ namespace Matrics
         /// <param name="f">The function to be applied to each element of the vector.
         /// Its arguments are i and the value for each element in the vector</param>
         /// <returns>A copy of the old vector with a scalar function mapped over it</returns>
-        public static T[] Map<T>(this T[] vector, Func<T, int, T> f){
+        public static T[] Apply<T>(this T[] vector, Func<T, int, T> f){
             T[] newVector = new T[vector.Length];
             for (int i = 0; i < vector.Length; i++){
                 newVector[i] = f.Invoke(newVector[i], i);
@@ -197,8 +266,8 @@ namespace Matrics
         /// </summary>
         /// <param name="vector">The vector</param>
         /// <returns>The wrapped vector</returns>
-        public static VectorWrapper<T> W<T>(this T[] vector){
-            return new VectorWrapper<T>(vector);
+        public static Vector<T> W<T>(this T[] vector){
+            return new Vector<T>(vector);
         }
     }
 }

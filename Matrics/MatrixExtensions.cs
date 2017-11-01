@@ -3,6 +3,9 @@ using Matrics.Exceptions;
 
 namespace Matrics
 {
+    /// <summary>
+    /// An extensions class for matricies
+    /// </summary>
     public static class MatrixExtentions{
         /// <summary>
         /// Standard matrix addtion
@@ -12,7 +15,7 @@ namespace Matrics
         /// <returns>Matrix sum</returns>
         public static T[,] Add<T>(this T[,] mat1, T[,] mat2){
             if (mat1.GetDimensions().Equals(mat2.GetDimensions())){
-                return mat1.Map((v, r, c) => v + (dynamic)mat2[r-1,c-1]);
+                return mat1.Apply((v, r, c) => v + (dynamic)mat2[r-1,c-1]);
             }
             else{
                 throw new MatrixSizeException($"Dimensions {mat1.GetDimensions().ToString()} and {mat2.GetDimensions().ToString()} do not match.");
@@ -28,7 +31,7 @@ namespace Matrics
         /// <returns>Matrix difference</returns>
         public static T[,] Subtract<T>(this T[,] mat1, T[,] mat2){
             if (mat1.GetDimensions().Equals(mat2.GetDimensions())){
-                return mat1.Map((v, r, c) => v - (dynamic)mat2[r-1,c-1]);
+                return mat1.Apply((v, r, c) => v - (dynamic)mat2[r-1,c-1]);
             }
             else{
                 throw new MatrixSizeException($"Dimensions {mat1.GetDimensions().ToString()} and {mat2.GetDimensions().ToString()} do not match.");
@@ -43,7 +46,7 @@ namespace Matrics
         /// <param name="scalar">Scalar factor</param>
         /// <returns>Matrix-scalar product</returns>
         public static T[,] Multiply<T>(this T[,] mat, T scalar){
-            return mat.Map((v, r, c) => v * (dynamic)scalar);
+            return mat.Apply((v, r, c) => v * (dynamic)scalar);
         }
 
         /// <summary>
@@ -53,7 +56,7 @@ namespace Matrics
         /// <param name="scalar">Scalar divisor</param>
         /// <returns>Matrix-scalar quotient</returns>
         public static T[,] Divide<T>(this T[,] mat, T scalar){
-            return mat.Map((v, r, c) => v / (dynamic)scalar);
+            return mat.Apply((v, r, c) => v / (dynamic)scalar);
         }
 
         /// <summary>
@@ -105,10 +108,11 @@ namespace Matrics
         /// <param name="addTo">The row to be added to</param>
         /// <param name="addFrom">The row to add</param>
         /// <returns>A copy of the matrix after row addition has taken place</returns>
-        public static T[,] RowAdd<T>(this T[,] mat, int addTo, int addFrom){
-            return mat.Map((v, r, c) => {
+        public static T[,] RowAdd<T>(this T[,] mat, int addTo, int addFrom, T multiple)
+        {
+            return mat.Apply((v, r, c) => {
                 if (r == addTo){
-                    return v + (dynamic)mat[addFrom - 1, c-1];
+                    return v + (dynamic)mat[addFrom - 1, c-1] * multiple;
                 }
                 return v;
             });
@@ -121,10 +125,11 @@ namespace Matrics
         /// <param name="subTo">The row to be subtracted from</param>
         /// <param name="subFrom">The row to subtract with</param>
         /// <returns>A copy of the matrix after row subtraction has taken place</returns>
-        public static T[,] RowSubtract<T>(this T[,] mat, int subTo, int subFrom){
-            return mat.Map((v, r, c) => {
+        public static T[,] RowSubtract<T>(this T[,] mat, int subTo, int subFrom, T multiple)
+        {
+            return mat.Apply((v, r, c) => {
                 if (r == subTo){
-                    return v - (dynamic)mat[subFrom - 1, c-1];
+                    return v - (dynamic)mat[subFrom - 1, c-1] * multiple;
                 }
                 return v;
             });
@@ -141,7 +146,7 @@ namespace Matrics
             if (scalar.GetHashCode() == 0){
                 throw new IllegalOperationException("Multiplying by zero isn't a legal row operation.");
             }
-            return mat.Map((v, r, c) => {
+            return mat.Apply((v, r, c) => {
                 if (r == row){
                     return v * (dynamic)scalar;
                 }
@@ -157,7 +162,7 @@ namespace Matrics
         /// <param name="scalar">The scalar to divide by</param>
         /// <returns>A copy of the matrix after row division has taken place</returns>
         public static T[,] RowDivide<T>(this T[,] mat, int row, T scalar){
-            return mat.Map((v, r, c) => {
+            return mat.Apply((v, r, c) => {
                 if (r == row){
                     return v / (dynamic)scalar;
                 }
@@ -173,7 +178,7 @@ namespace Matrics
         /// <param name="row2">The other row to swap</param>
         /// <returns>A copy of the matrix with the two rows swapped</returns>
         public static T[,] RowSwap<T>(this T[,] mat, int row1, int row2){
-            return mat.Map((v, r, c) => {
+            return mat.Apply((v, r, c) => {
                 if (r == row1)
                     return mat[row2-1, c-1];
                 if (r == row2)
@@ -229,13 +234,57 @@ namespace Matrics
         }
 
         /// <summary>
+        /// Produces the RREF form of the matrix
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <returns>The matrix in RREF form</returns>
+        public static T[,] RREF<T>(this T[,] matrix)
+        {
+            MatrixDimensions d = matrix.GetDimensions();
+            T[,] newMatrix = matrix;
+
+            int i = 0, j = 0;
+            while (i < d.rows && j < Math.Min(d.rows, d.cols))
+            {
+                bool pass = false;
+                if (newMatrix[i, j] == (dynamic)0)
+                {
+                    pass = true;
+                    for (int r = i + 1; r < d.rows; r++)
+                    {
+                        if (!(matrix[r, j] == (dynamic)0))
+                        {
+                            pass = false;
+                            newMatrix = newMatrix.RowSwap(i+1, r+1);
+                            r = d.rows;
+                        }
+                    }
+                }
+                if (!pass)
+                {
+                    newMatrix = newMatrix.RowDivide(i + 1, newMatrix[i, j]);
+                    for (int r = 0; r < d.rows; r++)
+                    {
+                        if (i != r && !matrix[r, j].Equals(0))
+                        {
+                            newMatrix = newMatrix.RowSubtract(r + 1, i + 1, newMatrix[r, j]);
+                        }
+                    }
+                    i++;
+                }
+                j++;
+            }
+            return newMatrix;
+        }
+
+        /// <summary>
         /// Maps a scalar function over a matrix
         /// </summary>
         /// <param name="mat">The matrix to be acted on</param>
         /// <param name="f">The function to be applied to each element of the matrix.
         /// Its arguments are the row, col, and the value for each element in the matrix</param>
         /// <returns>A copy of the old matrix with a scalar function mapped over it</returns>
-        public static T[,] Map<T>(this T[,] mat, Func<T, int, int, T> f){
+        public static T[,] Apply<T>(this T[,] mat, Func<T, int, int, T> f){
             T[,] newMat = new T[mat.GetLength(0),mat.GetLength(1)];
             MatrixDimensions dim = mat.GetDimensions();
             for(int r = 0; r < dim.rows; r++){
@@ -261,7 +310,7 @@ namespace Matrics
                     throw new IndexOutOfRangeException("That column index does not and will not exist in the new matrix.");
                 }
                 newMat = new T[d.rows, d.cols + 1];
-                return newMat.Map((v, r, c) => {
+                return newMat.Apply((v, r, c) => {
                     if (c < insertIndex){
                         return mat[r-1,c-1];
                     }
@@ -276,7 +325,7 @@ namespace Matrics
                     throw new IndexOutOfRangeException("That row index does not and will not exist in the new matrix.");
                 }
                 newMat = new T[d.rows + 1, d.cols];
-                return newMat.Map((v, r, c) => {
+                return newMat.Apply((v, r, c) => {
                     if (r < insertIndex){
                         return mat[r-1,c-1];
                     }
@@ -303,7 +352,7 @@ namespace Matrics
                     throw new IndexOutOfRangeException("That column index does not exist in the matrix.");
                 }
                 newMat = new T[d.rows, d.cols - 1];
-                return newMat.Map((v, r, c) => {
+                return newMat.Apply((v, r, c) => {
                     if (c < removeIndex){
                         return mat[r-1,c-1];
                     }
@@ -317,7 +366,7 @@ namespace Matrics
                     throw new IndexOutOfRangeException("That row index does not exist in the matrix.");
                 }
                 newMat = new T[d.rows - 1, d.cols];
-                return newMat.Map((v, r, c) => {
+                return newMat.Apply((v, r, c) => {
                     if (r < removeIndex){
                         return mat[r-1,c-1];
                     }
@@ -403,12 +452,94 @@ namespace Matrics
         }
 
         /// <summary>
+        /// Convert a matrix of one type to another type through a specified function
+        /// </summary>
+        /// <typeparam name="T">The type of the original matrix</typeparam>
+        /// <typeparam name="T2">The type of the new matrix</typeparam>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="castFunc">The conversion function</param>
+        /// <returns>A matrix of the new type</returns>
+        public static T2[,] Cast<T, T2>(this T[,] matrix, Func<T, T2> castFunc)
+        {
+            T2[,] newMatrix = matrix.GetDimensions().CreateMatrix<T2>();
+            MatrixDimensions d = matrix.GetDimensions();
+            for (int r = 0; r < d.rows; r++)
+            {
+                for (int c = 0; c < d.cols; c++)
+                {
+                    newMatrix[r, c] = castFunc.Invoke(matrix[r,c]);
+                }
+            }
+            return newMatrix;
+        }
+
+        /// <summary>
+        /// Casts a matrix from one type to another using the default cast operator
+        /// </summary>
+        /// <typeparam name="T">The type of the original matrix</typeparam>
+        /// <typeparam name="T2">The type of the new matrix</typeparam>
+        /// <param name="matrix">The matrix</param>
+        /// <returns>A matrix of the new type</returns>
+        public static T2[,] Cast<T, T2>(this T[,] matrix)
+        {
+            return matrix.Cast(e => (T2)(dynamic)e);
+        }
+
+        /// <summary>
+        /// Converts a matrix to a jagged 2D array
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="direction">The direction for the major axis of the jagged 2D array</param>
+        /// <returns>A jagged 2D array of the matrix</returns>
+        public static T[][] ToJagged<T>(this T[,] matrix, VectorDirection direction)
+        {
+            T[][] jaggedArray = new T[matrix.GetDimensions().InDirection(direction)][];
+            for (int i = 0; i < jaggedArray.Length; i++)
+            {
+                jaggedArray[i] = matrix.GetVector(direction, i + 1);
+            }
+            return jaggedArray;
+        }
+
+        /// <summary>
+        /// Converts a "smooth" jagged 2D array into a matrix
+        /// </summary>
+        /// <param name="jaggedArray">The "smooth" jagged 2D array</param>
+        /// <param name="direction">The direction of the jagged 2D array's major axis</param>
+        /// <returns>A matrix of the jagged 2D array</returns>
+        public static T[,] ToMatrix<T>(this T[][] jaggedArray, VectorDirection direction)
+        {
+            if (jaggedArray.Length == 0)
+            {
+                throw new MatrixSizeException("A matrix cannot have zero elements");
+            }
+            foreach (T[] arr in jaggedArray) {
+                if (jaggedArray[0].Length != arr.Length)
+                {
+                    throw new MatrixSizeException("A matrix cannot be jagged");
+                }
+            }
+            if (jaggedArray[0].Length == 0)
+            {
+                throw new MatrixSizeException("A matrix cannot have zero elements");
+            }
+            if (direction == VectorDirection.Row) {
+                return new MatrixDimensions(jaggedArray.Length, jaggedArray[0].Length).CreateMatrix<T>().Apply((v, r, c) => jaggedArray[r-1][c-1]);
+            }
+            else
+            {
+                return new MatrixDimensions(jaggedArray[0].Length, jaggedArray.Length).CreateMatrix<T>().Apply((v, r, c) => jaggedArray[c-1][r-1]);
+            }
+
+        }
+
+        /// <summary>
         /// Wraps a matrix
         /// </summary>
         /// <param name="mat">The matrix</param>
         /// <returns>The wrapped matrix</returns>
-        public static MatrixWrapper<T> W<T>(this T[,] mat){
-            return new MatrixWrapper<T>(mat);
+        public static Matrix<T> W<T>(this T[,] mat){
+            return new Matrix<T>(mat);
         }
     }
 }

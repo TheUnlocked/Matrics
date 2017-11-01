@@ -1,0 +1,9 @@
+More types of vector product
+Inserting a vector into a matrix
+Allowing for multiple insertions/deletions at a time
+Matrix Inverse
+Give wrappers support for all extension functions
+Map over each row/col
+Covert a vector of one type to another (via casting or func)
+Create an identity matrix
+Check if a matrix has an identity
