@@ -5,7 +5,8 @@ namespace Matrics
     /// </summary>
     public struct Matrix<T>{
         private T[,] innerMatrix;
-        private Matrix(T[,] innerMatrix){
+
+        public Matrix(T[,] innerMatrix){
             this.innerMatrix = innerMatrix;
         }
 
