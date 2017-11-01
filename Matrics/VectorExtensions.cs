@@ -114,7 +114,7 @@ namespace Matrics
         /// <returns>The magnitude of the vector</returns>
         public static T Magnitude<T>(this T[] vector)
         {
-            return Math.Sqrt((dynamic)vector.MagnitudeSquared());
+            return (T)(dynamic)Math.Sqrt((dynamic)vector.MagnitudeSquared());
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Matrics
         public static T[] Apply<T>(this T[] vector, Func<T, int, T> f){
             T[] newVector = new T[vector.Length];
             for (int i = 0; i < vector.Length; i++){
-                newVector[i] = f.Invoke(newVector[i], i);
+                newVector[i] = f.Invoke(vector[i], i);
             }
             return newVector;
         }
