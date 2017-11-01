@@ -107,6 +107,7 @@ namespace Matrics
         /// <param name="mat">The matrix</param>
         /// <param name="addTo">The row to be added to</param>
         /// <param name="addFrom">The row to add</param>
+        /// <param name="multiple">The factor by which to add</param>
         /// <returns>A copy of the matrix after row addition has taken place</returns>
         public static T[,] RowAdd<T>(this T[,] mat, int addTo, int addFrom, T multiple)
         {
@@ -124,6 +125,7 @@ namespace Matrics
         /// <param name="mat">The matrix</param>
         /// <param name="subTo">The row to be subtracted from</param>
         /// <param name="subFrom">The row to subtract with</param>
+        /// <param name="multiple">The factor by which to subtract</param>
         /// <returns>A copy of the matrix after row subtraction has taken place</returns>
         public static T[,] RowSubtract<T>(this T[,] mat, int subTo, int subFrom, T multiple)
         {

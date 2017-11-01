@@ -24,5 +24,6 @@
     <PackageTags>Matrix Vector Math</PackageTags>
     <!--<PackageLicenseUrl></PackageLicenseUrl>-->
     <PackageProjectUrl>https://github.com/TheUnlocked/Matrics</PackageProjectUrl>
+    <DocumentationFile>MatricsDocumentation.xml</DocumentationFile>
   </PropertyGroup>
 </Project>

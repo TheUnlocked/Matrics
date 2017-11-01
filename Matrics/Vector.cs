@@ -6,6 +6,9 @@ namespace Matrics
     public struct Vector<T>{
         private T[] innerVector;
 
+        /// <summary>
+        /// Wrapper constructor
+        /// </summary>
         public Vector(T[] innerVector){
             this.innerVector = innerVector;
         }
