@@ -235,6 +235,48 @@ namespace Matrics
             throw new IllegalOperationException("Only squre matricies have determinants.");
         }
 
+        public static T[,] Augment<T>(this T[,] matrix, T[,] otherMatrix)
+        {
+            MatrixDimensions d1 = matrix.GetDimensions();
+            MatrixDimensions d2 = otherMatrix.GetDimensions();
+
+            if (d1.rows != d2.rows)
+            {
+                throw new MatrixSizeException("A matrix cannot be augmented if the second matrix has a different number of rows.");
+            }
+
+            T[,] augmentedMatrix = new T[d1.rows, d1.cols + d2.cols];
+            return augmentedMatrix.Apply((v, r, c) =>
+            {
+                if (c > d1.cols)
+                {
+                    return otherMatrix[r - 1, c - d1.cols - 1];
+                }
+                return matrix[r - 1, c - 1];
+            });
+        }
+
+        public static T[][,] Separate<T>(this T[,] matrix, params int[] augmentLengths)
+        {
+            MatrixDimensions d = matrix.GetDimensions();
+            if (augmentLengths.Sum() != d.cols)
+            {
+                throw new MatrixSizeException("An augmented matrix can't be split up into more sub-matricies than the augmented matrix contains.");
+            }
+            T[][,] splitMatricies = new T[augmentLengths.Length][,];
+            int colOff = 0;
+            for (int i = 0; i < augmentLengths.Length; i++)
+            {
+                if (augmentLengths[i] <= 0)
+                {
+                    throw new MatrixSizeException("A sub-matrix cannot have zero or fewer columns.");
+                }
+                splitMatricies[i] = new T[d.rows, augmentLengths[i]].Apply((v, r, c) => matrix[r-1, c-1 + colOff]);
+                colOff += augmentLengths[i];
+            }
+            return splitMatricies;
+        }
+
         /// <summary>
         /// Produces the RREF form of the matrix
         /// </summary>
@@ -279,13 +321,47 @@ namespace Matrics
             return newMatrix;
         }
 
+        public static bool IsIdentity<T>(this T[,] matrix)
+        {
+            if (!matrix.GetDimensions().IsSquare())
+                return false;
+            return matrix.MatrixEquals(Matrix<T>.IdentityMatrix(matrix.GetDimensions().rows));
+        }
+
         /// <summary>
-        /// Maps a scalar function over a matrix
+        /// Checks if a matrix has an identity
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <returns>Whether the matrix has an identity</returns>
+        public static bool HasIdentity<T>(this T[,] matrix)
+        {
+            if (!matrix.GetDimensions().IsSquare())
+                return false;
+            return matrix.RREF().IsIdentity();
+        }
+
+        public static T[,] Inverse<T>(this T[,] matrix)
+        {
+            MatrixDimensions d = matrix.GetDimensions();
+            if (!d.IsSquare())
+            {
+                throw new MatrixSizeException("A non-square matrix cannot have an inverse.");
+            }
+            T[][,] aug = matrix.Augment(Matrix<T>.IdentityMatrix(d.cols)).RREF().Separate(d.cols, d.cols);
+            if (!aug[0].IsIdentity())
+            {
+                throw new IllegalOperationException("A matrix with no identity has no inverse.");
+            }
+            return aug[1];
+        }
+
+        /// <summary>
+        /// Applies a scalar function to a matrix
         /// </summary>
         /// <param name="mat">The matrix to be acted on</param>
         /// <param name="f">The function to be applied to each element of the matrix.
-        /// Its arguments are the row, col, and the value for each element in the matrix</param>
-        /// <returns>A copy of the old matrix with a scalar function mapped over it</returns>
+        /// <para>Its arguments are the row, col, and the value for each element in the matrix</para></param>
+        /// <returns>A copy of the old matrix with a scalar function applied to it</returns>
         public static T[,] Apply<T>(this T[,] mat, Func<T, int, int, T> f){
             T[,] newMat = new T[mat.GetLength(0),mat.GetLength(1)];
             MatrixDimensions dim = mat.GetDimensions();
@@ -298,15 +374,40 @@ namespace Matrics
         }
 
         /// <summary>
+        /// Applies a vector function to a matrix in a specified direction
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="direction">The direction of vector to apply on</param>
+        /// <param name="f">The function to be applied over each vector in the matrix
+        /// <para>Its arguments are the vector along the specified axis and the index of that vector.</para></param>
+        /// <returns></returns>
+        public static T[,] ApplyOverVector<T>(this T[,] matrix, VectorDirection direction, Func<T[], int, T[]> f)
+        {
+            T[][] arr = matrix.ToJagged(direction);
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = f.Invoke(matrix.GetVector(direction, i + 1), i + 1);
+            }
+            return arr.ToMatrix(direction);
+        }
+
+        /// <summary>
         /// Inserts a row or column vector into a matrix
         /// </summary>
         /// <param name="mat">The matrix</param>
         /// <param name="direction">The type of vector to insert (row or column)</param>
         /// <param name="insertIndex">The vector index to insert at</param>
+        /// <param name="vector">The vector to insert at the index. If not incuded or null, the vector is populated with default values.</param>
         /// <returns>The matrix with an additional row/column at the specified index</returns>
-        public static T[,] InsertVector<T>(this T[,] mat, VectorDirection direction, int insertIndex){
+        public static T[,] InsertVector<T>(this T[,] mat, VectorDirection direction, int insertIndex, T[] vector = null){
             MatrixDimensions d = mat.GetDimensions();
             T[,] newMat;
+
+            if (vector != null && d.InDirection(direction) != vector.Length)
+            {
+                throw new VectorSizeException("A vector cannot be inserted into a matrix of a different size");
+            }
+
             if (direction == VectorDirection.Column){
                 if (insertIndex > d.cols + 1 || insertIndex < 1){
                     throw new IndexOutOfRangeException("That column index does not and will not exist in the new matrix.");
@@ -318,6 +419,10 @@ namespace Matrics
                     }
                     else if (c > insertIndex){
                          return mat[r-1,c-2];
+                    }
+                    if (vector != null)
+                    {
+                        return vector[r-1];
                     }
                     return v;
                 });
@@ -333,6 +438,10 @@ namespace Matrics
                     }
                     else if (r > insertIndex){
                          return mat[r-2,c-1];
+                    }
+                    if (vector != null)
+                    {
+                        return vector[c - 1];
                     }
                     return v;
                 });
@@ -451,6 +560,32 @@ namespace Matrics
             }
 
             return vector;
+        }
+
+        /// <summary>
+        /// Compares if two matricies are equal
+        /// </summary>
+        /// <param name="matrix1">The first matrix</param>
+        /// <param name="matrix2">The second matrix</param>
+        /// <returns>Whether or not the two matricies have equal elements</returns>
+        public static bool MatrixEquals<T>(this T[,] matrix1, T[,] matrix2)
+        {
+            MatrixDimensions d = matrix1.GetDimensions();
+            if (!d.Equals(matrix2.GetDimensions()))
+            {
+                return false;
+            }
+            for (int r = 0; r < d.rows; r++)
+            {
+                for (int c = 0; c < d.cols; c++)
+                {
+                    if (!matrix1[r, c].Equals(matrix2[r, c]))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         /// <summary>

@@ -52,6 +52,35 @@ namespace Matrics
         }
 
         /// <summary>
+        /// Creates an identity matrix of a given size.
+        /// <para>Identity matricies use 1 for 1 and the 0 for 0. T must support int casting or an error will be produced.</para>
+        /// </summary>
+        /// <param name="size">The length of the identity matrix</param>
+        /// <returns>An identity matrix of the given size</returns>
+        public static T[,] IdentityMatrix(int size)
+        {
+            return new MatrixDimensions(size, size).CreateMatrix<T>().Apply((v, r, c) => r == c ? (dynamic)1 : (dynamic)0);
+        }
+
+        /// <summary>
+        /// Compares if another matrix is equal to this one
+        /// </summary>
+        /// <param name="obj">The other object</param>
+        /// <returns>Whether or not the two matricies are equal</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj is Matrix<T>)
+            {
+                return M().MatrixEquals(((Matrix<T>)obj).M());
+            }
+            if (obj is T[,])
+            {
+                return M().MatrixEquals((T[,])obj);
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Implicit wrapper cast
         /// </summary>
         public static implicit operator T[,](Matrix<T> wrapper){
