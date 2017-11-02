@@ -80,6 +80,16 @@ namespace Matrics
             return false;
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return M().ToMatrixString();
+        }
+
         /// <summary>
         /// Implicit wrapper cast
         /// </summary>

@@ -6,8 +6,8 @@
 
   <PropertyGroup>
     <AssemblyTitle>Matrics</AssemblyTitle>
-    <Version>1.1.0</Version>
-    <FileVersion>1.1.0</FileVersion>
+    <Version>1.1.1</Version>
+    <FileVersion>1.1.1</FileVersion>
     <Authors>Unlocked</Authors>
     <Description>A C# extension library to let arrays act like vectors and matrices.</Description>
     <Copyright>Copyright (c) 2017 Unlocked</Copyright>
@@ -19,7 +19,7 @@
 
   <PropertyGroup>
     <PackageId>Matrics</PackageId>
-    <PackageVersion>1.1.0</PackageVersion>
+    <PackageVersion>1.1.1</PackageVersion>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Matrix Vector Math</PackageTags>
     <!--<PackageLicenseUrl></PackageLicenseUrl>-->
