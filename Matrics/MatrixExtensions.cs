@@ -235,6 +235,12 @@ namespace Matrics
             throw new IllegalOperationException("Only squre matricies have determinants.");
         }
 
+        /// <summary>
+        /// Augments a matrix
+        /// </summary>
+        /// <param name="matrix">The matrix to augment</param>
+        /// <param name="otherMatrix">The matrix to append</param>
+        /// <returns>The augmented matrix</returns>
         public static T[,] Augment<T>(this T[,] matrix, T[,] otherMatrix)
         {
             MatrixDimensions d1 = matrix.GetDimensions();
@@ -256,6 +262,12 @@ namespace Matrics
             });
         }
 
+        /// <summary>
+        /// Splits an augmented matrix
+        /// </summary>
+        /// <param name="matrix">The matrix to split</param>
+        /// <param name="augmentLengths">The number of columns in each constituent matrix. The sum of these lengths must equal the length of the matrix</param>
+        /// <returns>A list of sub-matricies</returns>
         public static T[][,] Separate<T>(this T[,] matrix, params int[] augmentLengths)
         {
             MatrixDimensions d = matrix.GetDimensions();
@@ -321,6 +333,11 @@ namespace Matrics
             return newMatrix;
         }
 
+        /// <summary>
+        /// Checks if a matrix is an identity matrix
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <returns>Whether the matrix is an identity matrix</returns>
         public static bool IsIdentity<T>(this T[,] matrix)
         {
             if (!matrix.GetDimensions().IsSquare())
@@ -340,6 +357,11 @@ namespace Matrics
             return matrix.RREF().IsIdentity();
         }
 
+        /// <summary>
+        /// Calculates the inverse of a matrix, if it has one
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <returns>The matrix's inverse</returns>
         public static T[,] Inverse<T>(this T[,] matrix)
         {
             MatrixDimensions d = matrix.GetDimensions();

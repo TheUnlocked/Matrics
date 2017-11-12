@@ -1,4 +1,16 @@
-More types of vector product
+Vector cross-product (for 2D/3D)
 Give wrappers support for all extension functions
 Covert a vector of one type to another (via casting or func)
 Check vector equality
+Verify operator compliance for Vector<>[,]
+Reduce necessity for operator compliance as much as possible (and make a list of all neccessary operators)
+
+Add Matrics Applications:
+Matrics.Application.MachineLearning
+Matrics.Application.Physics (For when I learn matrix applications in physics)
+Matrics.Application.Economics (I'd probably miss a lot of stuff here but I can add what I already know)
++ I'm sure matrics could provide specialized functions for more subject areas!
+
+Add Matrics Integrations: (these are low priority)
+Matrics.Integration.MathNet
++ Other stuff?

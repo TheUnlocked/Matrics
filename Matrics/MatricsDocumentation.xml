@@ -1,0 +1,578 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Matrics</name>
+    </assembly>
+    <members>
+        <member name="T:Matrics.Matrix`1">
+            <summary>
+            A wrapper struct for matricies
+            </summary>
+        </member>
+        <member name="M:Matrics.Matrix`1.#ctor(`0[0:,0:])">
+            <summary>
+            Wrapper constructor
+            </summary>
+        </member>
+        <member name="M:Matrics.Matrix`1.M">
+            <summary>
+            Produces the wrapped matrix
+            </summary>
+        </member>
+        <member name="M:Matrics.Matrix`1.op_Addition(Matrics.Matrix{`0},Matrics.Matrix{`0})">
+            <summary>
+            Adds the two matricies through <seealso cref="M:Matrics.MatrixExtentions.Add``1(``0[0:,0:],``0[0:,0:])"/>
+            </summary>
+        </member>
+        <member name="M:Matrics.Matrix`1.op_Subtraction(Matrics.Matrix{`0},Matrics.Matrix{`0})">
+            <summary>
+            Subtracts the two matricies through <seealso cref="M:Matrics.MatrixExtentions.Subtract``1(``0[0:,0:],``0[0:,0:])"/>
+            </summary>
+        </member>
+        <member name="M:Matrics.Matrix`1.op_Multiply(Matrics.Matrix{`0},`0)">
+            <summary>
+            Scalar multiplies the two matricies through <seealso cref="M:Matrics.MatrixExtentions.Multiply``1(``0[0:,0:],``0)"/>
+            </summary>
+        </member>
+        <member name="M:Matrics.Matrix`1.op_Division(Matrics.Matrix{`0},`0)">
+            <summary>
+            Scalar divides the two matricies through <seealso cref="M:Matrics.MatrixExtentions.Divide``1(``0[0:,0:],``0)"/>
+            </summary>
+        </member>
+        <member name="M:Matrics.Matrix`1.op_Multiply(Matrics.Matrix{`0},Matrics.Matrix{`0})">
+            <summary>
+            Multiplies the two matricies through <seealso cref="M:Matrics.MatrixExtentions.Multiply``1(``0[0:,0:],``0[0:,0:])"/>
+            </summary>
+        </member>
+        <member name="M:Matrics.Matrix`1.IdentityMatrix(System.Int32)">
+            <summary>
+            Creates an identity matrix of a given size.
+            <para>Identity matricies use 1 for 1 and the 0 for 0. T must support int casting or an error will be produced.</para>
+            </summary>
+            <param name="size">The length of the identity matrix</param>
+            <returns>An identity matrix of the given size</returns>
+        </member>
+        <member name="M:Matrics.Matrix`1.Equals(System.Object)">
+            <summary>
+            Compares if another matrix is equal to this one
+            </summary>
+            <param name="obj">The other object</param>
+            <returns>Whether or not the two matricies are equal</returns>
+        </member>
+        <member name="M:Matrics.Matrix`1.op_Implicit(Matrics.Matrix{`0})~`0[0:,0:]">
+            <summary>
+            Implicit wrapper cast
+            </summary>
+        </member>
+        <member name="M:Matrics.Matrix`1.op_Implicit(`0[0:,0:])~Matrics.Matrix{`0}">
+            <summary>
+            Implicit wrapper cast
+            </summary>
+        </member>
+        <member name="M:Matrics.MatrixDimensions.InDirection(Matrics.VectorDirection)">
+            <summary>
+            Returns the number of rows/cols in the specified direction
+            </summary>
+            <param name="direction">The direction</param>
+            <returns>The number of rows/cols in the specified direction</returns>
+        </member>
+        <member name="M:Matrics.MatrixDimensions.Flip">
+            <summary>
+            Returns a flipped copy of the dimensions
+            </summary>
+            <returns>A flipped copy of the dimensions</returns>
+        </member>
+        <member name="M:Matrics.MatrixDimensions.CreateMatrix``1">
+            <summary>
+            Creates a new matrix based on the dimensions
+            </summary>
+            <returns>A matrix whose rows and columns are derived from the dimensions</returns>
+        </member>
+        <member name="T:Matrics.MatrixExtentions">
+            <summary>
+            An extensions class for matricies
+            </summary>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Add``1(``0[0:,0:],``0[0:,0:])">
+            <summary>
+            Standard matrix addtion
+            </summary>
+            <param name="mat1">Addend matrix</param> 
+            <param name="mat2">Addend matrix</param>
+            <returns>Matrix sum</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Subtract``1(``0[0:,0:],``0[0:,0:])">
+            <summary>
+            Standard matrix subtraction
+            </summary>
+            <param name="mat1">Minuend matrix</param>
+            <param name="mat2">Subtrahend matrix</param>
+            <returns>Matrix difference</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Multiply``1(``0[0:,0:],``0)">
+            <summary>
+            Matrix-scalar multiplication
+            </summary>
+            <param name="mat">Matrix factor</param>
+            <param name="scalar">Scalar factor</param>
+            <returns>Matrix-scalar product</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Divide``1(``0[0:,0:],``0)">
+            <summary>
+            Matrix-scalar division
+            </summary>
+            <param name="mat">Matrix dividend</param>
+            <param name="scalar">Scalar divisor</param>
+            <returns>Matrix-scalar quotient</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Multiply``1(``0[0:,0:],``0[0:,0:])">
+            <summary>
+            Matrix multiplication
+            </summary>
+            <param name="mat1">Left matrix</param>
+            <param name="mat2">Right matrix</param>
+            <returns>The product of the two matricies</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Sum``1(``0[0:,0:])">
+            <summary>
+            Calculates the sum of all elements in the matrix
+            </summary>
+            <param name="mat">The matrix to be summed</param>
+            <returns>The sum of all elements in the matrix</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.RowAdd``1(``0[0:,0:],System.Int32,System.Int32,``0)">
+            <summary>
+            Add a row to another row
+            </summary>
+            <param name="mat">The matrix</param>
+            <param name="addTo">The row to be added to</param>
+            <param name="addFrom">The row to add</param>
+            <param name="multiple">The factor by which to add</param>
+            <returns>A copy of the matrix after row addition has taken place</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.RowSubtract``1(``0[0:,0:],System.Int32,System.Int32,``0)">
+            <summary>
+            Subtract a row from another row
+            </summary>
+            <param name="mat">The matrix</param>
+            <param name="subTo">The row to be subtracted from</param>
+            <param name="subFrom">The row to subtract with</param>
+            <param name="multiple">The factor by which to subtract</param>
+            <returns>A copy of the matrix after row subtraction has taken place</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.RowMultiply``1(``0[0:,0:],System.Int32,``0)">
+            <summary>
+            Multiply a row by a scalar
+            </summary>
+            <param name="mat">The matrix</param>
+            <param name="row">The row to be multiplied</param>
+            <param name="scalar">The scalar to multiply by</param>
+            <returns>A copy of the matrix after row multiplication has taken place</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.RowDivide``1(``0[0:,0:],System.Int32,``0)">
+            <summary>
+            Divide a row by a scalar
+            </summary>
+            <param name="mat">The matrix</param>
+            <param name="row">The row to be divided</param>
+            <param name="scalar">The scalar to divide by</param>
+            <returns>A copy of the matrix after row division has taken place</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.RowSwap``1(``0[0:,0:],System.Int32,System.Int32)">
+            <summary>
+            Swaps two rows in a matrix
+            </summary>
+            <param name="mat">The matrix</param>
+            <param name="row1">One of the rows to swap</param>
+            <param name="row2">The other row to swap</param>
+            <returns>A copy of the matrix with the two rows swapped</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Transpose``1(``0[0:,0:])">
+            <summary>
+            Transposes a matrix
+            </summary>
+            <param name="mat">The matrix to transpose</param>
+            <returns>The transposed matrix</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Determinant``1(``0[0:,0:])">
+            <summary>
+            Produces the determinant of a square matrix
+            </summary>
+            <param name="mat">The matrix</param>
+            <returns>The determinant of the matrix</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Augment``1(``0[0:,0:],``0[0:,0:])">
+            <summary>
+            Augments a matrix
+            </summary>
+            <param name="matrix">The matrix to augment</param>
+            <param name="otherMatrix">The matrix to append</param>
+            <returns>The augmented matrix</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Separate``1(``0[0:,0:],System.Int32[])">
+            <summary>
+            Splits an augmented matrix
+            </summary>
+            <param name="matrix">The matrix to split</param>
+            <param name="augmentLengths">The number of columns in each constituent matrix. The sum of these lengths must equal the length of the matrix</param>
+            <returns>A list of sub-matricies</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.RREF``1(``0[0:,0:])">
+            <summary>
+            Produces the RREF form of the matrix
+            </summary>
+            <param name="matrix">The matrix</param>
+            <returns>The matrix in RREF form</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.IsIdentity``1(``0[0:,0:])">
+            <summary>
+            Checks if a matrix is an identity matrix
+            </summary>
+            <param name="matrix">The matrix</param>
+            <returns>Whether the matrix is an identity matrix</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.HasIdentity``1(``0[0:,0:])">
+            <summary>
+            Checks if a matrix has an identity
+            </summary>
+            <param name="matrix">The matrix</param>
+            <returns>Whether the matrix has an identity</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Inverse``1(``0[0:,0:])">
+            <summary>
+            Calculates the inverse of a matrix, if it has one
+            </summary>
+            <param name="matrix">The matrix</param>
+            <returns>The matrix's inverse</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Apply``1(``0[0:,0:],System.Func{``0,System.Int32,System.Int32,``0})">
+            <summary>
+            Applies a scalar function to a matrix
+            </summary>
+            <param name="mat">The matrix to be acted on</param>
+            <param name="f">The function to be applied to each element of the matrix.
+            <para>Its arguments are the row, col, and the value for each element in the matrix</para></param>
+            <returns>A copy of the old matrix with a scalar function applied to it</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.ApplyOverVector``1(``0[0:,0:],Matrics.VectorDirection,System.Func{``0[],System.Int32,``0[]})">
+            <summary>
+            Applies a vector function to a matrix in a specified direction
+            </summary>
+            <param name="matrix">The matrix</param>
+            <param name="direction">The direction of vector to apply on</param>
+            <param name="f">The function to be applied over each vector in the matrix
+            <para>Its arguments are the vector along the specified axis and the index of that vector.</para></param>
+            <returns></returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.InsertVector``1(``0[0:,0:],Matrics.VectorDirection,System.Int32,``0[])">
+            <summary>
+            Inserts a row or column vector into a matrix
+            </summary>
+            <param name="mat">The matrix</param>
+            <param name="direction">The type of vector to insert (row or column)</param>
+            <param name="insertIndex">The vector index to insert at</param>
+            <param name="vector">The vector to insert at the index. If not incuded or null, the vector is populated with default values.</param>
+            <returns>The matrix with an additional row/column at the specified index</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.RemoveVector``1(``0[0:,0:],Matrics.VectorDirection,System.Int32)">
+            <summary>
+            Removes a row or column vector in a matrix
+            </summary>
+            <param name="mat">The matrix</param>
+            <param name="direction">The type of vector to remove (row or column)</param>
+            <param name="removeIndex">The vector index to remove at</param>
+            <returns>The matrix with an removed row/column at the specified index</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.GetDimensions``1(``0[0:,0:])">
+            <summary>
+            Get the dimensions of a matrix
+            </summary>
+            <param name="mat">The matrix</param>
+            <returns>The dimensions of the matrix</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.ToMatrixString``1(``0[0:,0:])">
+            <summary>
+            Produces a human-readable matrix
+            </summary>
+            <param name="mat">The matrix</param>
+            <returns>A human-readable representation of the matrix</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.FlattenToVector``1(``0[0:,0:])">
+            <summary>
+            Produces a vector in the form [R(1), R(2), R(3), ..., R(n)]
+            </summary>
+            <param name="mat">The matrix to flatten</param>
+            <returns>A vector resulting from the flattened matrix</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.GetVector``1(``0[0:,0:],Matrics.VectorDirection,System.Int32)">
+            <summary>
+            Gets the vector R(n) or C(n) from the matrix
+            </summary>
+            <param name="mat">The matrix</param>
+            <param name="direction">The direction to retrive the vector from (either rows or columns)</param>
+            <param name="index">The index of the row or column</param>
+            <returns>The vector at R(n) or C(n)</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.MatrixEquals``1(``0[0:,0:],``0[0:,0:])">
+            <summary>
+            Compares if two matricies are equal
+            </summary>
+            <param name="matrix1">The first matrix</param>
+            <param name="matrix2">The second matrix</param>
+            <returns>Whether or not the two matricies have equal elements</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Cast``2(``0[0:,0:],System.Func{``0,``1})">
+            <summary>
+            Convert a matrix of one type to another type through a specified function
+            </summary>
+            <typeparam name="T">The type of the original matrix</typeparam>
+            <typeparam name="T2">The type of the new matrix</typeparam>
+            <param name="matrix">The matrix</param>
+            <param name="castFunc">The conversion function</param>
+            <returns>A matrix of the new type</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.Cast``2(``0[0:,0:])">
+            <summary>
+            Casts a matrix from one type to another using the default cast operator
+            </summary>
+            <typeparam name="T">The type of the original matrix</typeparam>
+            <typeparam name="T2">The type of the new matrix</typeparam>
+            <param name="matrix">The matrix</param>
+            <returns>A matrix of the new type</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.ToJagged``1(``0[0:,0:],Matrics.VectorDirection)">
+            <summary>
+            Converts a matrix to a jagged 2D array
+            </summary>
+            <param name="matrix">The matrix</param>
+            <param name="direction">The direction for the major axis of the jagged 2D array</param>
+            <returns>A jagged 2D array of the matrix</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.ToMatrix``1(``0[][],Matrics.VectorDirection)">
+            <summary>
+            Converts a "smooth" jagged 2D array into a matrix
+            </summary>
+            <param name="jaggedArray">The "smooth" jagged 2D array</param>
+            <param name="direction">The direction of the jagged 2D array's major axis</param>
+            <returns>A matrix of the jagged 2D array</returns>
+        </member>
+        <member name="M:Matrics.MatrixExtentions.W``1(``0[0:,0:])">
+            <summary>
+            Wraps a matrix
+            </summary>
+            <param name="mat">The matrix</param>
+            <returns>The wrapped matrix</returns>
+        </member>
+        <member name="T:Matrics.Vector`1">
+            <summary>
+            A wrapper struct for vectors
+            </summary>
+        </member>
+        <member name="M:Matrics.Vector`1.#ctor(`0[])">
+            <summary>
+            Wrapper constructor
+            </summary>
+        </member>
+        <member name="M:Matrics.Vector`1.V">
+            <summary>
+            Produces the wrapped vector
+            </summary>
+        </member>
+        <member name="M:Matrics.Vector`1.op_Addition(Matrics.Vector{`0},Matrics.Vector{`0})">
+            <summary>
+            Adds the two vectors through <seealso cref="M:Matrics.VectorExtensions.Add``1(``0[],``0[])"/>
+            </summary>
+        </member>
+        <member name="M:Matrics.Vector`1.op_Subtraction(Matrics.Vector{`0},Matrics.Vector{`0})">
+            <summary>
+            Subtracts the two vectors through <seealso cref="M:Matrics.VectorExtensions.Subtract``1(``0[],``0[])"/>
+            </summary>
+        </member>
+        <member name="M:Matrics.Vector`1.op_Multiply(Matrics.Vector{`0},`0)">
+            <summary>
+            Multiplies the two vectors through <seealso cref="M:Matrics.VectorExtensions.Multiply``1(``0[],``0)"/>
+            </summary>
+        </member>
+        <member name="M:Matrics.Vector`1.op_Division(Matrics.Vector{`0},`0)">
+            <summary>
+            Divides the two vectors through <seealso cref="M:Matrics.VectorExtensions.Divide``1(``0[],``0)"/>
+            </summary>
+        </member>
+        <member name="M:Matrics.Vector`1.op_Multiply(Matrics.Vector{`0},Matrics.Vector{`0})">
+            <summary>
+            Dot products the two vectors through <seealso cref="M:Matrics.VectorExtensions.DotProduct``1(``0[],``0[])"/>
+            </summary>
+        </member>
+        <member name="M:Matrics.Vector`1.op_UnaryNegation(Matrics.Vector{`0})">
+            <summary>
+            Negates the vector through <c>Apply((v, i) => -(dynamic)v);</c>
+            </summary>
+        </member>
+        <member name="M:Matrics.Vector`1.op_Implicit(Matrics.Vector{`0})~`0[]">
+            <summary>
+            Implicit wrapper cast
+            </summary>
+        </member>
+        <member name="M:Matrics.Vector`1.op_Implicit(`0[])~Matrics.Vector{`0}">
+            <summary>
+            Implicit wrapper cast
+            </summary>
+        </member>
+        <member name="T:Matrics.VectorDirection">
+            <summary>
+            The type of directions that a 1D matrix can be in.
+            Vertical and Column are synonyms, and Horizontal and Row are synonyms.
+            </summary>
+        </member>
+        <member name="T:Matrics.VectorExtensions">
+            <summary>
+            An extensions class for vectors
+            </summary>
+        </member>
+        <member name="M:Matrics.VectorExtensions.Add``1(``0[],``0[])">
+            <summary>
+            Standard vector addtion
+            </summary>
+            <param name="vector1">Addend vector</param> 
+            <param name="vector2">Addend vector</param>
+            <returns>Vector sum</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.Subtract``1(``0[],``0[])">
+            <summary>
+            Standard vector subtraction
+            </summary>
+            <param name="vector1">Minuend vector</param> 
+            <param name="vector2">Subtrahend vector</param>
+            <returns>Vector difference</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.Multiply``1(``0[],``0)">
+            <summary>
+            Vector-scalar multiplication
+            </summary>
+            <param name="vector">Vector factor</param>
+            <param name="scalar">Scalar factor</param>
+            <returns>Vector-scalar product</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.Divide``1(``0[],``0)">
+            <summary>
+            Vector-scalar division
+            </summary>
+            <param name="vector">Vector dividend</param>
+            <param name="scalar">Scalar divisor</param>
+            <returns>Vector-scalar quotient</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.DotProduct``1(``0[],``0[])">
+            <summary>
+            Find the dot product of two vectors
+            </summary>
+            <param name="vector1">Vector factor</param>
+            <param name="vector2">Vector factor</param>
+            <returns>The dot product of the two vectors</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.Sum``1(``0[])">
+            <summary>
+            Calculates the sum of all elements in the vector
+            </summary>
+            <param name="vector">The vector to be summed</param>
+            <returns>The sum of all elements in the vector</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.MagnitudeSquared``1(``0[])">
+            <summary>
+            Gets the squared magnitude of a vector
+            </summary>
+            <param name="vector">The vector</param>
+            <returns>The squared magnitude of the vector</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.Magnitude``1(``0[])">
+            <summary>
+            Gets the magnitude of a vector.
+            <para>The magnitude will be processed as a <see cref="T:System.Double"/> through the <see cref="M:System.Math.Sqrt(System.Double)"/> function. Use <see cref="M:Matrics.VectorExtensions.MagnitudeSquared``1(``0[])"/> instead for incompatible types.</para>
+            </summary>
+            <param name="vector">The vector</param>
+            <returns>The magnitude of the vector</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.Normalize``1(``0[])">
+            <summary>
+            Gets the normalized (or unit) vector.
+            <para>This uses <see cref="M:Matrics.VectorExtensions.Magnitude``1(``0[])"/>, meaning any input will be processed as a <see cref="T:System.Double"/> through <see cref="M:System.Math.Sqrt(System.Double)"/>.</para>
+            </summary>
+            <param name="vector">The vector</param>
+            <returns></returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.ScalarProject``1(``0[],``0[])">
+            <summary>
+            Produces the scalar projection of one vector onto another vector
+            <para>This uses <see cref="M:Matrics.VectorExtensions.Magnitude``1(``0[])"/>, meaning any input will be processed as a <see cref="T:System.Double"/> through <see cref="M:System.Math.Sqrt(System.Double)"/>.</para>
+            </summary>
+            <param name="fromVector">The vector to project from</param>
+            <param name="onVector">The vector to project onto</param>
+            <returns>The scalar projection</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.VectorProject``1(``0[],``0[])">
+            <summary>
+            Projects one vector onto another.
+            <para>This uses <see cref="M:Matrics.VectorExtensions.ScalarProject``1(``0[],``0[])"/> and <see cref="M:Matrics.VectorExtensions.Normalize``1(``0[])"/>, meaning any input will be processed as a <see cref="T:System.Double"/> through <see cref="M:System.Math.Sqrt(System.Double)"/>.</para>
+            </summary>
+            <param name="fromVector">The vector to project from</param>
+            <param name="onVector">The vector to project onto</param>
+            <returns>The vector projection</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.VectorReject``1(``0[],``0[])">
+            <summary>
+            Rejects one vector onto another
+            <para>This uses <see cref="M:Matrics.VectorExtensions.VectorProject``1(``0[],``0[])"/>, meaning any input will be processed as a <see cref="T:System.Double"/> through <see cref="M:System.Math.Sqrt(System.Double)"/>.</para>
+            </summary>
+            <param name="fromVector">The vector to reject from</param>
+            <param name="onVector">The vector to reject onto</param>
+            <returns>The vector rejection</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.Apply``1(``0[],System.Func{``0,System.Int32,``0})">
+            <summary>
+            Maps a scalar function over a vector
+            </summary>
+            <param name="vector">The vector to be acted on</param>
+            <param name="f">The function to be applied to each element of the vector.
+            Its arguments are i and the value for each element in the vector</param>
+            <returns>A copy of the old vector with a scalar function mapped over it</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.InsertElement``1(``0[],``0,System.Int32)">
+            <summary>
+            Inserts an element into a vector at a specified position
+            </summary>
+            <param name="vector">The vector to insert into</param>
+            <param name="element">The element to insert</param>
+            <param name="insertPosition">The position at which to insert the element</param>
+            <returns>A copy of the vector with the element inserted</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.RemoveElement``1(``0[],System.Int32)">
+            <summary>
+            Removes an element from a vector
+            </summary>
+            <param name="vector">The vector</param>
+            <param name="removePosition">The position of the element to remove</param>
+            <returns>A copy of the vector with the element removed</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.ToVectorString``1(``0[])">
+            <summary>
+            Get a human-readable representation of a vector
+            </summary>
+            <param name="vector">The vector</param>
+            <returns>A human-readable representation of the vector</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.ExpandToMatrix``1(``0[],Matrics.VectorDirection)">
+            <summary>
+            Converts a vector to a single-row/column matrix
+            </summary>
+            <param name="vector">The vector</param>
+            <param name="shape">The resulting shape of the matrix (either horizontal or vertical)</param>
+            <returns>The single-row/column matrix derived from the vector</returns>
+        </member>
+        <member name="M:Matrics.VectorExtensions.W``1(``0[])">
+            <summary>
+            Wraps the vector.
+            </summary>
+            <param name="vector">The vector</param>
+            <returns>The wrapped vector</returns>
+        </member>
+    </members>
+</doc>
